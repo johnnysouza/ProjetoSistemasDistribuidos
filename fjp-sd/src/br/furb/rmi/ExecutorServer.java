@@ -27,7 +27,19 @@ public class ExecutorServer extends UnicastRemoteObject implements Executor {
 	@Override
 	public int execute(String classpath, String mainClass) {
 		System.out.println(String.format("execute(classpath: %s / mainClass: %s)", classpath, mainClass));
-		ExecutorImpl executor = new ExecutorImpl(classpath, mainClass);
+		ExecutorImpl executor = new ExecutorImpl(classpath, mainClass, null);
+		try {
+			return executor.execute();
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+			return 1;
+		}
+	}
+
+	@Override
+	public int execute(String classpath, String mainClass, String[] params) throws RemoteException {
+		System.out.println(String.format("execute(classpath: %s / mainClass: %s)", classpath, mainClass));
+		ExecutorImpl executor = new ExecutorImpl(classpath, mainClass, params);
 		try {
 			return executor.execute();
 		} catch (IOException | InterruptedException e) {
