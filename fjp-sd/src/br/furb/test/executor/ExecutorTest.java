@@ -11,13 +11,13 @@ public class ExecutorTest {
 	
 	@Test
 	public void testSucess() throws IOException, InterruptedException {
-		ExecutorImpl executor = new ExecutorImpl(".\\bin", "br.furb.test.executor.ExecutorMainTest");
+		ExecutorImpl executor = new ExecutorImpl(".\\target\\classes", "br.furb.test.executor.ExecutorMainTest");
 		Assert.assertEquals(0, executor.execute());		
 	}
 	
 	@Test
 	public void testFail() throws IOException, InterruptedException {
-		ExecutorImpl executor = new ExecutorImpl(".\\bin", "br.furb.test.executor.INVALID");
+		ExecutorImpl executor = new ExecutorImpl(".\\target\\classes", "br.furb.test.executor.INVALID");
 		Assert.assertNotEquals(0, executor.execute());		
 	}
 

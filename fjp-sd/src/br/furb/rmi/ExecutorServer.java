@@ -18,7 +18,7 @@ public class ExecutorServer extends UnicastRemoteObject implements Executor {
 	public static void main(String[] args) {
 		try {
 			ExecutorServer obj = new ExecutorServer();
-			Naming.rebind("//localhost/HelloWorld", obj);
+			Naming.rebind("//localhost/execute", obj);
 		} catch (Exception ex) {
 			System.out.println("Exception: " + ex.getMessage());
 		}		
@@ -35,13 +35,4 @@ public class ExecutorServer extends UnicastRemoteObject implements Executor {
 			return 1;
 		}
 	}
-	
-	
-
-	
-	
-	
-	
-	
-
 }
