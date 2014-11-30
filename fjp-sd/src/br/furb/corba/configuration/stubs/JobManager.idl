@@ -1,0 +1,23 @@
+module stubs {
+
+  enum JobType{COMPILATION, BUILD};
+
+  struct Job {
+    string job_nome;
+    short day;
+    long year;
+  };
+  
+  typedef sequence<Job> arrayJobs;
+
+  interface job_manager {
+
+	void save(in Job job);
+	boolean exist(in string job_nome, out boolean ret);
+	void delete(in string job_nome);
+	boolean load(in string path, out Job ret);
+	boolean load_all(out arrayJobs jobs);
+
+  };
+
+};

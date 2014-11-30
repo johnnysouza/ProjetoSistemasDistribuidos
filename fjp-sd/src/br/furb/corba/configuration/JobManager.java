@@ -108,7 +108,8 @@ public class JobManager implements JobManagerDao {
 	}
 
 	@Override
-	public Job load(File path) {
+	public Job load(String stringPath) {
+		File path = new File(stringPath);
 		Job job = null;
 
 		if (path.exists()) {
@@ -144,7 +145,7 @@ public class JobManager implements JobManagerDao {
 	}
 
 	@Override
-	public List<Job> loadAll() {
+	public Job[] loadAll() {
 		// Cria a lista dos jobs
 		List<Job> jobs = new ArrayList<Job>();
 
@@ -162,14 +163,14 @@ public class JobManager implements JobManagerDao {
 				for (File file : jobFiles) {
 					if (file.getName().endsWith(".dat")) {
 						// Adiciona o job na lista
-						jobs.add(load(file));
+						jobs.add(load(file.getAbsolutePath()));
 					}
 				}
 
 			}
 		}
 
-		return jobs;
+		return (Job[]) jobs.toArray();
 	}
 
 }
