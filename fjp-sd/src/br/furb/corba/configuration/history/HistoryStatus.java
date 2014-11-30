@@ -1,4 +1,4 @@
-package br.furb.corba.history;
+package br.furb.corba.configuration.history;
 
 public enum HistoryStatus {
 	

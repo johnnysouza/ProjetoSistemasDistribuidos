@@ -9,7 +9,7 @@ public class Job implements Serializable {
 	private String name;
 	private JobType type;
 	private String repositoryPath;
-	
+
 	public Job(String name, JobType type, String repositoryPath) {
 		super();
 		this.name = name;
@@ -34,8 +34,7 @@ public class Job implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result
-				+ ((repositoryPath == null) ? 0 : repositoryPath.hashCode());
+		result = prime * result + ((repositoryPath == null) ? 0 : repositoryPath.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
@@ -66,8 +65,7 @@ public class Job implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Job [name=" + name + ", type=" + type + ", repositoryPath="
-				+ repositoryPath + "]";
+		return "Job [name=" + name + ", type=" + type + ", repositoryPath=" + repositoryPath + "]";
 	}
 
 }

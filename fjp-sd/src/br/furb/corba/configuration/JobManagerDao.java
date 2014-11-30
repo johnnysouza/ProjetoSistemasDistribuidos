@@ -5,8 +5,9 @@ import java.util.List;
 
 public interface JobManagerDao {
 	
-	void save(String jobId);
-	void delete(String jobId);
+	void save(Job job);
+	boolean exist(String jobName);
+	void delete(String jobName);
 	Job load(File path);
 	List<Job> loadAll();
 
