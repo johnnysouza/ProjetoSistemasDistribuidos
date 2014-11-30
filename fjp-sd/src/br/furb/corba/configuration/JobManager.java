@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JobManager implements JobManagerDao {
@@ -20,9 +21,9 @@ public class JobManager implements JobManagerDao {
 
 	@Override
 	public void save(String jobName) {
-//		File file = new File(jobsPath.getAbsolutePath().concat(
-//				File.pathSeparator));
-		//TODO
+		// File file = new File(jobsPath.getAbsolutePath().concat(
+		// File.pathSeparator));
+		// TODO
 	}
 
 	@Override
@@ -34,12 +35,12 @@ public class JobManager implements JobManagerDao {
 	public Job load(File path) {
 		Job job = null;
 		if (path.exists()) {
-			FileInputStream fis = null;
-			ObjectInput jobFile = null;
+			FileInputStream fileReader = null;
+			ObjectInput objectReader = null;
 			try {
-				fis = new FileInputStream(path);
-				jobFile = new ObjectInputStream(fis);
-				job = (Job) jobFile.readObject();
+				fileReader = new FileInputStream(path);
+				objectReader = new ObjectInputStream(fileReader);
+				job = (Job) objectReader.readObject();
 			} catch (FileNotFoundException e) {
 				System.out.println("Arquivo não encontrado");
 			} catch (IOException e) {
@@ -48,30 +49,50 @@ public class JobManager implements JobManagerDao {
 				System.out.println("Erro no carregamento do job");
 			} finally {
 				try {
-					if (fis != null) {
-						fis.close();
+					if (fileReader != null) {
+						fileReader.close();
 					}
-					if (jobFile != null) {
-						jobFile.close();
+					if (objectReader != null) {
+						objectReader.close();
 					}
 				} catch (IOException ex) {
-					System.out.println("Erro na liberação do arquivo");
+					System.out
+							.println("Erro na liberação dos leitores do arquivo");
 				}
 			}
+		} else {
+			System.out.println("Diretório informado não existe");
 		}
 		return job;
 	}
 
 	@Override
-	public List<Job> loadAll(String path) {
-		File[] files = jobsPath.listFiles();
-		for (File file : files) {
-			if (file.getName().endsWith(".dat")) {
+	public List<Job> loadAll() {
+		// Cria a lista dos jobs
+		List<Job> jobs = new ArrayList<Job>();
+
+		// Busca na pasta do projeto de integração e lista os arquivos
+		File[] jobsDiretory = jobsPath.listFiles();
+
+		// Busca pelos arquivos, os que são as pastas dos projeto
+		for (File path : jobsDiretory) {
+			if (path.isDirectory()) {
+
+				// Lista os arquivo dentro da pasta do projeto
+				File[] jobFiles = path.listFiles();
+
+				// Procura o arquivo com as informações do projeto
+				for (File file : jobFiles) {
+					if (file.getName().endsWith(".dat")) {
+						// Adiciona o job na lista
+						jobs.add(load(file));
+					}
+				}
 
 			}
 		}
-		// TODO Auto-generated method stub
-		return null;
+
+		return jobs;
 	}
 
 }

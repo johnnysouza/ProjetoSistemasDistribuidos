@@ -8,6 +8,6 @@ public interface JobManagerDao {
 	void save(String jobId);
 	void delete(String jobId);
 	Job load(File path);
-	List<Job> loadAll(String path);
+	List<Job> loadAll();
 
 }
