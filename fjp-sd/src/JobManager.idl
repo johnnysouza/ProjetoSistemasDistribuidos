@@ -1,11 +1,15 @@
+module br {
+module furb {
+module corba {
+module configuration {
 module stubs {
 
   enum JobType{COMPILATION, BUILD};
 
   struct Job {
     string job_nome;
-    short day;
-    long year;
+    JobType job_type;
+    string repository_Path;
   };
   
   typedef sequence<Job> arrayJobs;
@@ -20,4 +24,8 @@ module stubs {
 
   };
 
+};
+};
+};
+};
 };
