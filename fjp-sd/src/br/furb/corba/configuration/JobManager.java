@@ -14,11 +14,21 @@ import org.apache.commons.io.FileUtils;
 
 public class JobManager implements JobManagerDao {
 
-	private File jobsPath;
+	private static JobManager instance;
+	public File jobsPath;
 
-	public JobManager() {
-		jobsPath = new File(System.getProperty("user.dir").concat(File.pathSeparator).concat("\\fjp_sd"));
-		jobsPath.mkdir();
+	private JobManager() {
+		jobsPath = new File(System.getProperty("user.dir").concat(File.separator).concat("fjp_sd"));
+		if (!jobsPath.exists()) {
+			jobsPath.mkdir();
+		}
+	}
+
+	public static JobManager getInstance() {
+		if (instance == null) {
+			instance = new JobManager();
+		}
+		return instance;
 	}
 
 	@Override
@@ -33,10 +43,10 @@ public class JobManager implements JobManagerDao {
 		if (!jobPath.exists()) {
 			jobPath.mkdir();
 		}
-		
+
 		// Arquivo do job
 		File jobFile = new File(jobPath.getAbsolutePath().concat(jobSuffix).concat(".dat"));
-		
+
 		// Se já existe deleta
 		if (jobFile.exists() && jobFile.isFile()) {
 			jobFile.delete();
@@ -65,7 +75,7 @@ public class JobManager implements JobManagerDao {
 				System.out.println("Erro na liberação dos leitores do arquivo");
 			}
 		}
-		
+
 		// Cria a pasta do hisrótico do job se não existe ainda
 		File jobHistoryPath = new File(jobPath.getAbsolutePath().concat(File.separator).concat("history"));
 		if (!jobHistoryPath.exists()) {
@@ -75,11 +85,8 @@ public class JobManager implements JobManagerDao {
 
 	@Override
 	public boolean exist(String jobName) {
-		// Auxiliar com o caminho até a pasta do job
-		String jobPath = jobsPath.getAbsolutePath().concat(File.separator).concat(jobName);
-
-		// Arquivo do job
-		File jobFile = new File(jobPath.concat(File.separator).concat(jobName).concat(File.separator).concat(".dat"));
+		// Carrega o arquivo do job
+		File jobFile = convertJobNameToJobFile(jobName);
 
 		// Verifica existência
 		if (jobFile.exists()) {
@@ -108,15 +115,16 @@ public class JobManager implements JobManagerDao {
 	}
 
 	@Override
-	public Job load(String stringPath) {
-		File path = new File(stringPath);
+	public Job load(String jobName) {
+		// Carrega o arquivo do job
+		File jobFile = convertJobNameToJobFile(jobName);
 		Job job = null;
 
-		if (path.exists()) {
+		if (jobFile.exists()) {
 			FileInputStream fileReader = null;
 			ObjectInputStream objectReader = null;
 			try {
-				fileReader = new FileInputStream(path);
+				fileReader = new FileInputStream(jobFile);
 				objectReader = new ObjectInputStream(fileReader);
 				job = (Job) objectReader.readObject();
 			} catch (FileNotFoundException e) {
@@ -163,14 +171,45 @@ public class JobManager implements JobManagerDao {
 				for (File file : jobFiles) {
 					if (file.getName().endsWith(".dat")) {
 						// Adiciona o job na lista
-						jobs.add(load(file.getAbsolutePath()));
+						jobs.add(load(file.getName().replace(".dat", "")));
 					}
 				}
 
 			}
 		}
 
-		return (Job[]) jobs.toArray();
+		Job[] ret = new Job[jobs.size()];
+		for (int i = 0, size = jobs.size(); i < size; i++) {
+			ret[i] = jobs.get(i);
+		}
+
+		return ret;
+	}
+
+	private File convertJobNameToJobFile(String jobName) {
+		// Auxiliar com o caminho até a pasta do job
+		String jobPath = jobsPath.getAbsolutePath().concat(File.separator).concat(jobName);
+
+		// Arquivo do job
+		return new File(jobPath.concat(File.separator).concat(jobName).concat(".dat"));
+	}
+	
+	public File getJobsPath() {
+		return jobsPath;
+	}
+
+	public static void main(String[] args) {
+		JobManager jobManager = JobManager.getInstance();
+		Job job = new Job("teste", JobType.COMPILATION, "123");
+		jobManager.save(job);
+		System.out.println(jobManager.exist("teste"));
+		System.out.println(jobManager.loadAll()[0].toString());
+		job = new Job("teste", JobType.COMPILATION, "1234");
+		jobManager.save(job);
+		System.out.println(jobManager.load("teste").toString());
+		System.out.println(jobManager.exist("teste"));
+		jobManager.delete("teste");
+		System.out.println(jobManager.exist("teste"));
 	}
 
 }
