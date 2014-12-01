@@ -198,18 +198,4 @@ public class JobManager implements JobManagerDao {
 		return jobsPath;
 	}
 
-	public static void main(String[] args) {
-		JobManager jobManager = JobManager.getInstance();
-		Job job = new Job("teste", JobType.COMPILATION, "123");
-		jobManager.save(job);
-		System.out.println(jobManager.exist("teste"));
-		System.out.println(jobManager.loadAll()[0].toString());
-		job = new Job("teste", JobType.COMPILATION, "1234");
-		jobManager.save(job);
-		System.out.println(jobManager.load("teste").toString());
-		System.out.println(jobManager.exist("teste"));
-		jobManager.delete("teste");
-		System.out.println(jobManager.exist("teste"));
-	}
-
 }
