@@ -102,7 +102,9 @@ public class JobManagerClient {
 	}
 	
 	public void save(Job job) {
-		//TODO
+		Job_Type jobTypeAdapter = Job_Type.from_int(job.getType().ordinal());
+		Job_ jobAdapter = new Job_(job.getName(), jobTypeAdapter, job.getRepositoryPath());
+		jobManager.save(jobAdapter);
 	}
 
 }

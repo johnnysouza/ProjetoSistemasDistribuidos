@@ -19,8 +19,8 @@ public class job_managerImpl extends job_managerPOA {
 
 	@Override
 	public void save(Job_ job) {
-		JobType jobTypeAdapter = br.furb.corba.configuration.JobType.values()[job.job_type.value()];
-		Job jobAdapter = new br.furb.corba.configuration.Job(job.job_nome, jobTypeAdapter, job.repository_Path);
+		JobType jobTypeAdapter = JobType.values()[job.job_type.value()];
+		Job jobAdapter = new Job(job.job_nome, jobTypeAdapter, job.repository_Path);
 		jobManager.save(jobAdapter);
 	}
 
