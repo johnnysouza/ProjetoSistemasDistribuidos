@@ -9,6 +9,7 @@ import br.furb.config.ConfigHelper;
 import br.furb.corba.JobManagerClient;
 import br.furb.corba.configuration.history.HistoryStatus;
 import br.furb.corba.configuration.history.JobHistory;
+import br.furb.facade.MiddlewareFacade;
 import br.furb.rmi.Builder;
 
 public class BuilderImpl implements Builder {
@@ -53,7 +54,7 @@ public class BuilderImpl implements Builder {
 			e.printStackTrace();
 		}
 		
-		JobManagerClient.addHistory(jobName, new JobHistory(operation, status ? HistoryStatus.SUCCESS : HistoryStatus.FAIL, System.currentTimeMillis()));
+		MiddlewareFacade.getInstance().addHistory(jobName, new JobHistory(operation, status ? HistoryStatus.SUCCESS : HistoryStatus.FAIL, System.currentTimeMillis()));
 		return status;
 	}	
 

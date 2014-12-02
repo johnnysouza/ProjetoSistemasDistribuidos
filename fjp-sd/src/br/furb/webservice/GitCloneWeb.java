@@ -9,6 +9,7 @@ import javax.jws.WebService;
 import br.furb.corba.JobManagerClient;
 import br.furb.corba.configuration.history.HistoryStatus;
 import br.furb.corba.configuration.history.JobHistory;
+import br.furb.facade.MiddlewareFacade;
 import br.furb.git.GitClone;
 
 @WebService
@@ -24,14 +25,15 @@ public class GitCloneWeb {
 			if (file.exists()) {
 				delete(file);
 			}
-			
+
 			git.execute();
 			status = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		JobManagerClient.addHistory(jobName,
+		MiddlewareFacade.getInstance().addHistory(
+				jobName,
 				new JobHistory("clone", status ? HistoryStatus.SUCCESS
 						: HistoryStatus.FAIL, System.currentTimeMillis()));
 		return status;

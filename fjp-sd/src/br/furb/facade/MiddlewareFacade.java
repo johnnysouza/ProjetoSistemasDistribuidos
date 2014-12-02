@@ -5,6 +5,8 @@ import java.net.URL;
 import java.rmi.RemoteException;
 
 import br.furb.config.ConfigHelper;
+import br.furb.corba.JobManagerClient;
+import br.furb.corba.configuration.history.JobHistory;
 import br.furb.rmi.Builder;
 import br.furb.rmi.BuilderClient;
 import br.furb.webservice.client.GitCloneWeb;
@@ -15,7 +17,7 @@ import br.furb.webservice.client.LoginWebService;
 public class MiddlewareFacade {
 	
 	
-	private MiddlewareFacade instance;
+	private static MiddlewareFacade instance;
 	private String[] servers;
 	private String webServiceServerPort;
 	int index;
@@ -26,7 +28,7 @@ public class MiddlewareFacade {
 		index = 0;
 	}
 	
-	public MiddlewareFacade getInstance() {
+	public static MiddlewareFacade getInstance() {
 		if (instance == null) {
 			instance = new MiddlewareFacade();
 		}
@@ -74,6 +76,20 @@ public class MiddlewareFacade {
 	public boolean cloneRepository(String jobName, String repository, String targetDir) {
 		GitCloneWeb clone = new GitCloneWebService(makeWSURL("clone")).getGitCloneWebPort();
 		return clone.cloneRepository(jobName, repository, targetDir);
+	}
+	
+	private String[] makeORBParams() {
+		return new String[] {"-ORBInitialHost", getAvailableServer()};
+	}
+	
+	public void addHistory(String jobName, JobHistory history) {
+		JobManagerClient client = new JobManagerClient(makeORBParams());
+		client.addHistory(jobName, history);
+	}
+	
+	public JobHistory[] loadHistorys(String jobName) {
+		JobManagerClient client = new JobManagerClient(makeORBParams());
+		return client.loadHistorys(jobName);
 	}
 
 }
