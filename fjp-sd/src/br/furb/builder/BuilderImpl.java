@@ -3,6 +3,7 @@ package br.furb.builder;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.rmi.RemoteException;
 
 import br.furb.config.ConfigHelper;
 import br.furb.corba.JobManagerClient;
@@ -71,7 +72,7 @@ public class BuilderImpl implements Builder {
 		return execute("package", projectDir, jobName);
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws RemoteException {
 		Builder builder = new BuilderImpl();
 		System.out
 				.println("##############################################################");
