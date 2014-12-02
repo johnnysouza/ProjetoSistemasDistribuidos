@@ -4,7 +4,7 @@ module corba {
 module configuration {
 module stubs {
 
-  enum Job_Type{COMPILATION, BUILD, TEST};
+  enum Job_Type{CLONE, COMPILATION, BUILD, TEST};
 
   struct Job_ {
     string job_nome;

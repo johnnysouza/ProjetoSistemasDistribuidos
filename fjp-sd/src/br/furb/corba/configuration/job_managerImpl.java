@@ -36,8 +36,8 @@ public class job_managerImpl extends job_managerPOA {
 	}
 
 	@Override
-	public boolean load(String path, Job_Holder ret) {
-		Job jobAdapter = jobManager.load(path);
+	public boolean load(String jobName, Job_Holder ret) {
+		Job jobAdapter = jobManager.load(jobName);
 		Job_Type jobType = Job_Type.from_int(jobAdapter.getType().ordinal());
 		ret.value = new Job_(jobAdapter.getName(), jobType, jobAdapter.getRepositoryPath());
 		return true;
