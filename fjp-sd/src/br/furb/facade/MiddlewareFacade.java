@@ -97,5 +97,25 @@ public class MiddlewareFacade {
 		JobManagerClient client = new JobManagerClient(makeORBParams());
 		return client.loadAll();
 	}
+	
+	public Job load(String jobName) {
+		JobManagerClient client = new JobManagerClient(makeORBParams());
+		return client.load(jobName);
+	}
+	
+	public void delete(String jobName) {
+		JobManagerClient client = new JobManagerClient(makeORBParams());
+		client.delete(jobName);
+	}
+	
+	public boolean exist(String jobName) {
+		JobManagerClient client = new JobManagerClient(makeORBParams());
+		return client.exist(jobName);
+	}
+	
+	public void save(Job job) {
+		JobManagerClient client = new JobManagerClient(makeORBParams());
+		client.save(job);
+	}	
 
 }
