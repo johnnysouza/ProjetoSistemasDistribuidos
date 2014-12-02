@@ -46,5 +46,9 @@ public class ConfigHelper {
 	public String getServers() {
 		return properties.getProperty(ConfigProperties.SERVERS.getProperty());
 	}
+	
+	public String getWebServiceServerPort() {
+		return properties.getProperty(ConfigProperties.WEBSERVICE_SERVER_PORT.getProperty());
+	}	
 
 }

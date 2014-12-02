@@ -4,7 +4,8 @@ public enum ConfigProperties {
 	
 	GIT_CMD("gitcmd"),
 	MVN_CMD("mvncmd"),
-	SERVERS("servers");
+	SERVERS("servers"),
+	WEBSERVICE_SERVER_PORT("webserviceserverport");
 	
 	
 	public String property;
