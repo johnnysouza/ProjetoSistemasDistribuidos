@@ -67,11 +67,13 @@ public class job_managerImpl extends job_managerPOA {
 	public boolean loadHistorys(String job_nome, arrayJobsHistoryHolder historysHolder) {
 		JobHistory[] jobsHistoryAdapter = jobManager.loadHistorys(job_nome);
 		Job_History[] historys = new Job_History[jobsHistoryAdapter.length];
+		
 		for (int i = 0; i < jobsHistoryAdapter.length; i++) {
 			JobHistory jobHistoryAdapter = jobsHistoryAdapter[i];
 			History_Status jobHistory = History_Status.from_int(jobHistoryAdapter.getStatus().ordinal());
 			historys[i] = new Job_History(jobHistoryAdapter.getDateInMillis(), jobHistoryAdapter.getLog(), jobHistory);
 		}
+		
 		historysHolder.value = historys.clone();
 		return true;
 	}

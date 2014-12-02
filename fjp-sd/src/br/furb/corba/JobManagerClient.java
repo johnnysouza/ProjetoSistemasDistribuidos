@@ -8,6 +8,7 @@ import org.omg.CosNaming.NamingContextPackage.CannotProceed;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
 
 import br.furb.corba.configuration.Job;
+import br.furb.corba.configuration.history.HistoryStatus;
 import br.furb.corba.configuration.history.JobHistory;
 import br.furb.corba.configuration.stubs.History_Status;
 import br.furb.corba.configuration.stubs.Job_History;
@@ -43,16 +44,41 @@ public class JobManagerClient {
 	}
 	
 	public JobHistory[] loadHistorys(String jobName) {
-		arrayJobsHistoryHolder historys = new arrayJobsHistoryHolder();
-		jobManager.loadHistorys(jobName, historys);
-		Job_History[] historysAdapter = historys.value;
-		//TODO
-		return null;
+		arrayJobsHistoryHolder jobHistorys = new arrayJobsHistoryHolder();
+		jobManager.loadHistorys(jobName, jobHistorys);
+		Job_History[] historysAdapter = jobHistorys.value;
+		
+		JobHistory[] historys = new JobHistory[historysAdapter.length];
+		for (int i = 0; i < historysAdapter.length; i++) {
+			Job_History jobHistoryAdapter = historysAdapter[i];
+			HistoryStatus jobHistory = HistoryStatus.values()[jobHistoryAdapter.status.value()];
+			historys[i] = new JobHistory(jobHistoryAdapter.log, jobHistory, jobHistoryAdapter.dateInMillis);
+		}
+		
+		return historys;
 	}
 	
 	public Job[] loadAll() {
 		//TODO
 		return null;
+	}
+	
+	public Job load(String jobName) {
+		//TODO
+		return null;
+	}
+	
+	public void delete(String jobName) {
+		//TODO
+	}
+	
+	public boolean exist(String jobName) {
+		//TODO
+		return false;
+	}
+	
+	public void save(Job job) {
+		//TODO
 	}
 
 }
