@@ -12,7 +12,8 @@ public class CreateFile {
 	}
 	
 	public void execute() throws IOException {
-		file.createNewFile();
+		//file.createNewFile();
+		// Pegadinha do malandro
 	}
 	
 	public static void main(String[] args) throws IOException {

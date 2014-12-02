@@ -47,6 +47,22 @@ public class ConfigHelper {
 		return properties.getProperty(ConfigProperties.SERVERS.getProperty());
 	}
 	
+	public String getServersWebServices() {
+		return properties.getProperty(ConfigProperties.SERVERS_WEBSERVICES.getProperty());
+	}
+	
+	public String getServersCorba() {
+		return properties.getProperty(ConfigProperties.SERVERS_CORBA.getProperty());
+	}
+	
+	public String getServersRMI() {
+		return properties.getProperty(ConfigProperties.SERVERS_RMI.getProperty());
+	}
+	
+	public String getString(String key) {
+		return properties.getProperty(key);
+	}
+	
 	public String getWebServiceServerPort() {
 		return properties.getProperty(ConfigProperties.WEBSERVICE_SERVER_PORT.getProperty());
 	}	
