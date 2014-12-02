@@ -42,5 +42,9 @@ public class ConfigHelper {
 	public String getMvnCmd() {
 		return properties.getProperty(ConfigProperties.MVN_CMD.getProperty());
 	}
+	
+	public String getServers() {
+		return properties.getProperty(ConfigProperties.SERVERS.getProperty());
+	}
 
 }
