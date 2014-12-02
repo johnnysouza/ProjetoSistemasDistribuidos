@@ -10,10 +10,10 @@ public class JobHistory implements Serializable {
 	private String log;
 	private HistoryStatus status;
 
-	public JobHistory(String log, HistoryStatus status, long date) {
+	public JobHistory(String log, HistoryStatus status, long dateInMillis) {
 		this.log = log;
 		this.status = status;
-		this.dateInMillis = date;
+		this.dateInMillis = dateInMillis;
 	}
 
 	public String getLog() {

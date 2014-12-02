@@ -166,22 +166,26 @@ public class JobManager implements JobConfigurationDao, JobHistoryDAO {
 		String jobPath = jobsPath.getAbsolutePath().concat(File.separator).concat(jobName);
 		File historyPath = new File(jobPath.concat(File.separator).concat(ConstantUtils.JOB_HISTORY));
 
-		if (historyPath.isDirectory()) {
-			File[] historys = historyPath.listFiles();
-
-			// Verifica se já atingiu o limete configurado (fixo por enquanto)
-			if (historys.length == NUM_JOB_TO_KEEP) {
-				// Deleta o job mais antigo
-				findOldestHistory(historys).delete();
+		if (historyPath.exists()) {
+			if (historyPath.isDirectory()) {
+				File[] historys = historyPath.listFiles();
+				
+				// Verifica se já atingiu o limete configurado (fixo por enquanto)
+				if (historys.length == NUM_JOB_TO_KEEP) {
+					// Deleta o job mais antigo
+					findOldestHistory(historys).delete();
+				}
+				
+				// Busca data atual para definir nome do historico
+				Date date = new Date(history.getDateInMillis());
+				SimpleDateFormat format = new SimpleDateFormat(ConstantUtils.DATE_FORMAT);
+				File historyFile = new File(historyPath.getAbsoluteFile().getAbsoluteFile().toString().concat(File.separator).concat(format.format(date) + ".dat"));
+				
+				// Serializa o historico num arquivo .dat
+				SerializationUtils.serializeObject(history, historyFile);
 			}
-
-			// Busca data atual para definir nome do historico
-			Date date = new Date(history.getDateInMillis());
-			SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
-			File historyFile = new File(format.format(date));
-
-			// Serializa o historico num arquivo .dat
-			SerializationUtils.serializeObject(history, historyFile);
+		} else {
+			System.out.println("Diretório não existe. Verifique se job buscado realmente existe");
 		}
 	}
 
@@ -210,8 +214,16 @@ public class JobManager implements JobConfigurationDao, JobHistoryDAO {
 	}
 
 	private File findOldestHistory(File[] historys) {
-		// TODO implementar
-		return null;
+		File oldFileModified = historys[0];
+		long lodDateModified = historys[0].lastModified();
+		
+		for (File history : historys) {
+			if (history.lastModified() > lodDateModified) {
+				oldFileModified = history;
+			}
+		}
+		
+		return oldFileModified;
 	}
 
 }
