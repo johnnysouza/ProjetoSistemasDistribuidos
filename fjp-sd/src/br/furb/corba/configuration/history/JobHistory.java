@@ -1,7 +1,6 @@
 package br.furb.corba.configuration.history;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class JobHistory implements Serializable {
 
@@ -28,4 +27,8 @@ public class JobHistory implements Serializable {
 		return dateInMillis;
 	}
 
+	@Override
+	public String toString() {
+		return "JobHistory [dateInMillis=" + dateInMillis + ", log=" + log + ", status=" + status + "]";
+	}
 }
