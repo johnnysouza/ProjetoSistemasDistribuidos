@@ -2,6 +2,6 @@ package br.furb.corba.configuration.history;
 
 public enum HistoryStatus {
 	
-	SUCCESS, UNSTABLE, FAIL;
+	SUCCESS, FAIL;
 
 }

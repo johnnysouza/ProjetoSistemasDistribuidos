@@ -5,11 +5,15 @@ import java.io.File;
 import java.io.InputStreamReader;
 
 import br.furb.config.ConfigHelper;
+import br.furb.corba.JobManagerClient;
+import br.furb.corba.configuration.history.HistoryStatus;
+import br.furb.corba.configuration.history.JobHistory;
 import br.furb.rmi.Builder;
 
 public class BuilderImpl implements Builder {
 
-	private boolean execute(String operation, String projectDir) {
+	private boolean execute(String operation, String projectDir, String jobName) {
+		boolean status = false;
 		try {
 			StringBuilder sb = new StringBuilder();
 			sb.append(ConfigHelper.getInstance().getMvnCmd());
@@ -43,35 +47,41 @@ public class BuilderImpl implements Builder {
 				e.printStackTrace();
 			}
 
-			return (exitCode == 0) && !failure;
+			status = (exitCode == 0) && !failure;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
 		}
+		
+		JobManagerClient.addHistory(jobName, new JobHistory(operation, status ? HistoryStatus.SUCCESS : HistoryStatus.FAIL, System.currentTimeMillis()));
+		return status;
+	}	
+
+	@Override
+	public boolean compile(String jobName, String projectDir) {
+		return execute("compile", projectDir, jobName);		
 	}
 
 	@Override
-	public boolean compile(String projectDir) {
-		return execute("compile", projectDir);
+	public boolean test(String jobName, String projectDir) {
+		return execute("test", projectDir, jobName);
 	}
 
 	@Override
-	public boolean test(String projectDir) {
-		return execute("test", projectDir);
+	public boolean packageJar(String jobName, String projectDir) {
+		return execute("package", projectDir, jobName);
 	}
 
 	public static void main(String[] args) {
 		Builder builder = new BuilderImpl();
 		System.out
 				.println("##############################################################");
-		System.out
-				.println(builder
-						.compile("C:\\Users\\Fredy\\git\\ProjetoSistemasDistribuidos\\fjp-sd-test"));
+		System.out.println(builder.compile("fjp-sd-test", "C:\\Temp\\testfjp\\fjp-sd-test"));
 		System.out
 				.println("##############################################################");
+		System.out.println(builder.test("fjp-sd-test", "C:\\Temp\\testfjp\\fjp-sd-test"));
 		System.out
-				.println(builder
-						.test("C:\\Users\\Fredy\\git\\ProjetoSistemasDistribuidos\\fjp-sd-test"));
+				.println("##############################################################");
+		System.out.println(builder.packageJar("fjp-sd-test", "C:\\Temp\\testfjp\\fjp-sd-test"));
 		System.out
 				.println("##############################################################");
 	}

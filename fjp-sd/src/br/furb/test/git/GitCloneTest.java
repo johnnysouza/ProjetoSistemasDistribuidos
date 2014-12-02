@@ -22,7 +22,7 @@ public class GitCloneTest {
 	public void testWebService01() {
 		new File("C:\\temp\\testRepository\\").delete();
 		GitCloneWeb clone = new GitCloneWebService().getGitCloneWebPort();
-		boolean bool = clone.cloneRepository("https://github.com/johnnysouza/ProjetoSistemasDistribuidos", "C:\\temp\\testRepository");
+		boolean bool = clone.cloneRepository("https://github.com/johnnysouza/ProjetoSistemasDistribuidos", "C:\\temp\\testfjp");
 		
 		if (!bool) {
 			throw new RuntimeException("O WebService executou com erro.");
