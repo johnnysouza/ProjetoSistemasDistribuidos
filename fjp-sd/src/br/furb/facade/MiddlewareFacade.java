@@ -6,6 +6,7 @@ import java.rmi.RemoteException;
 
 import br.furb.config.ConfigHelper;
 import br.furb.corba.JobManagerClient;
+import br.furb.corba.configuration.Job;
 import br.furb.corba.configuration.history.JobHistory;
 import br.furb.rmi.Builder;
 import br.furb.rmi.BuilderClient;
@@ -90,6 +91,11 @@ public class MiddlewareFacade {
 	public JobHistory[] loadHistorys(String jobName) {
 		JobManagerClient client = new JobManagerClient(makeORBParams());
 		return client.loadHistorys(jobName);
+	}
+	
+	public Job[] loadAll() {
+		JobManagerClient client = new JobManagerClient(makeORBParams());
+		return client.loadAll();
 	}
 
 }
