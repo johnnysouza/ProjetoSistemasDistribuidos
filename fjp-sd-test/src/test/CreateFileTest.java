@@ -18,6 +18,7 @@ public class CreateFileTest {
 		CreateFile createFile = new CreateFile(file);
 		createFile.execute();
 		Assert.assertTrue(file.exists());
+		Assert.fail();
 	}
 
 }
