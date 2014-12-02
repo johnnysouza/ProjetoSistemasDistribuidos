@@ -4,23 +4,34 @@ module corba {
 module configuration {
 module stubs {
 
-  enum JobType{COMPILATION, BUILD};
+  enum Job_Type{COMPILATION, BUILD, TEST};
 
-  struct Job {
+  struct Job_ {
     string job_nome;
-    JobType job_type;
+    Job_Type job_type;
     string repository_Path;
   };
   
-  typedef sequence<Job> arrayJobs;
+  enum History_Status {SUCCESS, FAIL};
+  
+  struct Job_History {
+  	long long dateInMillis;
+  	string log;
+  	History_Status status;
+  };
+  
+  typedef sequence<Job_> arrayJobs;
+  typedef sequence<Job_History> arrayJobsHistory;
 
   interface job_manager {
 
-	void save(in Job job);
+	void save(in Job_ job);
 	boolean exist(in string job_nome, out boolean ret);
 	void delete(in string job_nome);
-	boolean load(in string path, out Job ret);
+	boolean load(in string path, out Job_ ret);
 	boolean load_all(out arrayJobs jobs);
+	void add_history(in string job_nome, in Job_History history);
+	boolean loadHistorys(in string job_nome, out arrayJobsHistory historys);
 
   };
 
