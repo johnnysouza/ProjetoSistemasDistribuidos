@@ -24,8 +24,8 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _CloneRepository_QNAME = new QName("http://webservice.furb.br/", "cloneRepository");
-    private final static QName _CloneRepositoryResponse_QNAME = new QName("http://webservice.furb.br/", "cloneRepositoryResponse");
+    private final static QName _LoginResponse_QNAME = new QName("http://webservice.furb.br/", "loginResponse");
+    private final static QName _Login_QNAME = new QName("http://webservice.furb.br/", "login");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: br.furb.webservice.client
@@ -35,37 +35,37 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CloneRepository }
+     * Create an instance of {@link LoginResponse }
      * 
      */
-    public CloneRepository createCloneRepository() {
-        return new CloneRepository();
+    public LoginResponse createLoginResponse() {
+        return new LoginResponse();
     }
 
     /**
-     * Create an instance of {@link CloneRepositoryResponse }
+     * Create an instance of {@link Login }
      * 
      */
-    public CloneRepositoryResponse createCloneRepositoryResponse() {
-        return new CloneRepositoryResponse();
+    public Login createLogin() {
+        return new Login();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link CloneRepository }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link LoginResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.furb.br/", name = "cloneRepository")
-    public JAXBElement<CloneRepository> createCloneRepository(CloneRepository value) {
-        return new JAXBElement<CloneRepository>(_CloneRepository_QNAME, CloneRepository.class, null, value);
+    @XmlElementDecl(namespace = "http://webservice.furb.br/", name = "loginResponse")
+    public JAXBElement<LoginResponse> createLoginResponse(LoginResponse value) {
+        return new JAXBElement<LoginResponse>(_LoginResponse_QNAME, LoginResponse.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link CloneRepositoryResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link Login }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.furb.br/", name = "cloneRepositoryResponse")
-    public JAXBElement<CloneRepositoryResponse> createCloneRepositoryResponse(CloneRepositoryResponse value) {
-        return new JAXBElement<CloneRepositoryResponse>(_CloneRepositoryResponse_QNAME, CloneRepositoryResponse.class, null, value);
+    @XmlElementDecl(namespace = "http://webservice.furb.br/", name = "login")
+    public JAXBElement<Login> createLogin(Login value) {
+        return new JAXBElement<Login>(_Login_QNAME, Login.class, null, value);
     }
 
 }
