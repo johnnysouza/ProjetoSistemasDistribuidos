@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import br.furb.config.ConfigHelper;
+
 public class GitClone {
 	
 	private String targetDir;
@@ -17,7 +19,7 @@ public class GitClone {
 	public void execute() throws IOException {
 		StringBuilder sb = new StringBuilder();
 		sb.append("\"");
-		sb.append(GitConfig.getInstance().getGitCmd());
+		sb.append(ConfigHelper.getInstance().getGitCmd());
 		sb.append("\" clone \"");
 		sb.append(repository);
 		sb.append("\" ");

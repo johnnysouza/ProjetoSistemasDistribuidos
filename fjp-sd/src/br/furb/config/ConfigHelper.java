@@ -1,4 +1,4 @@
-package br.furb.git;
+package br.furb.config;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,24 +6,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class GitConfig {
+public class ConfigHelper {
 	
-	private static GitConfig config;
+	private static ConfigHelper config;
 	private Properties properties;
 	
-	private GitConfig() {
+	private ConfigHelper() {
 		properties = new Properties();
 	}
 	
 	private void load() throws IOException {
-		File file = new File("git.properties");
+		File file = new File("fjp.properties");
 		InputStream input = new FileInputStream(file);
 		properties.load(input);
 	}
 	
-	public static GitConfig getInstance() {
+	public static ConfigHelper getInstance() {
 		if (config == null) {
-			config = new GitConfig();
+			config = new ConfigHelper();
 			try {
 				config.load();
 			} catch (IOException e) {				
@@ -36,7 +36,11 @@ public class GitConfig {
 	}
 	
 	public String getGitCmd() {
-		return properties.getProperty(GitProperties.GIT_CMD.getProperty());
+		return properties.getProperty(ConfigProperties.GIT_CMD.getProperty());
+	}
+	
+	public String getMvnCmd() {
+		return properties.getProperty(ConfigProperties.MVN_CMD.getProperty());
 	}
 
 }
