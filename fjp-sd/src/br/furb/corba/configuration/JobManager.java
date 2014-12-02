@@ -1,19 +1,21 @@
 package br.furb.corba.configuration;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
-public class JobManager implements JobManagerDao {
+import br.furb.corba.ConstantUtils;
+import br.furb.corba.configuration.history.JobHistory;
+import br.furb.corba.configuration.history.JobHistoryDAO;
 
+public class JobManager implements JobConfigurationDao, JobHistoryDAO {
+
+	private static final short NUM_JOB_TO_KEEP = 10;
 	private static JobManager instance;
 	public File jobsPath;
 
@@ -29,6 +31,10 @@ public class JobManager implements JobManagerDao {
 			instance = new JobManager();
 		}
 		return instance;
+	}
+
+	public File getJobsPath() {
+		return jobsPath;
 	}
 
 	@Override
@@ -53,31 +59,10 @@ public class JobManager implements JobManagerDao {
 		}
 
 		// Serializa o job num arquivo .dat
-		FileOutputStream fileWriter = null;
-		ObjectOutputStream objectWriter = null;
-		try {
-			fileWriter = new FileOutputStream(jobFile);
-			objectWriter = new ObjectOutputStream(fileWriter);
-			objectWriter.writeObject(job);
-		} catch (FileNotFoundException e) {
-			System.out.println("Arquivo não encontrado");
-		} catch (IOException e) {
-			System.out.println("Erro na leitura do arquivo");
-		} finally {
-			try {
-				if (fileWriter != null) {
-					fileWriter.close();
-				}
-				if (objectWriter != null) {
-					objectWriter.close();
-				}
-			} catch (IOException ex) {
-				System.out.println("Erro na liberação dos leitores do arquivo");
-			}
-		}
+		SerializationUtils.serializeObject(job, jobFile);
 
 		// Cria a pasta do hisrótico do job se não existe ainda
-		File jobHistoryPath = new File(jobPath.getAbsolutePath().concat(File.separator).concat("history"));
+		File jobHistoryPath = new File(jobPath.getAbsolutePath().concat(File.separator).concat(ConstantUtils.JOB_HISTORY));
 		if (!jobHistoryPath.exists()) {
 			jobHistoryPath.mkdir();
 		}
@@ -121,29 +106,10 @@ public class JobManager implements JobManagerDao {
 		Job job = null;
 
 		if (jobFile.exists()) {
-			FileInputStream fileReader = null;
-			ObjectInputStream objectReader = null;
-			try {
-				fileReader = new FileInputStream(jobFile);
-				objectReader = new ObjectInputStream(fileReader);
-				job = (Job) objectReader.readObject();
-			} catch (FileNotFoundException e) {
-				System.out.println("Arquivo não encontrado");
-			} catch (IOException e) {
-				System.out.println("Erro na leitura do arquivo");
-			} catch (ClassNotFoundException e) {
-				System.out.println("Erro no carregamento do job");
-			} finally {
-				try {
-					if (fileReader != null) {
-						fileReader.close();
-					}
-					if (objectReader != null) {
-						objectReader.close();
-					}
-				} catch (IOException ex) {
-					System.out.println("Erro na liberação dos leitores do arquivo");
-				}
+			Object objectSerialized = SerializationUtils.deserealizeFile(jobFile);
+			
+			if (objectSerialized != null) {
+				job = (Job) objectSerialized;
 			}
 		} else {
 			System.out.println("Diretório informado não existe");
@@ -193,9 +159,59 @@ public class JobManager implements JobManagerDao {
 		// Arquivo do job
 		return new File(jobPath.concat(File.separator).concat(jobName).concat(".dat"));
 	}
-	
-	public File getJobsPath() {
-		return jobsPath;
+
+	@Override
+	public void addHistory(String jobName, JobHistory history) {
+		// Localiza a pasta de historicos do job
+		String jobPath = jobsPath.getAbsolutePath().concat(File.separator).concat(jobName);
+		File historyPath = new File(jobPath.concat(File.separator).concat(ConstantUtils.JOB_HISTORY));
+
+		if (historyPath.isDirectory()) {
+			File[] historys = historyPath.listFiles();
+
+			// Verifica se já atingiu o limete configurado (fixo por enquanto)
+			if (historys.length == NUM_JOB_TO_KEEP) {
+				// Deleta o job mais antigo
+				findOldestHistory(historys).delete();
+			}
+
+			// Busca data atual para definir nome do historico
+			Date date = new Date(history.getDateInMillis());
+			SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
+			File historyFile = new File(format.format(date));
+
+			// Serializa o historico num arquivo .dat
+			SerializationUtils.serializeObject(history, historyFile);
+		}
+	}
+
+	@Override
+	public JobHistory[] loadHistorys(String jobName) {
+		JobHistory[] loadHistorys = null;
+
+		String jobPath = jobsPath.getAbsolutePath().concat(File.separator).concat(jobName);
+		File historyPath = new File(jobPath.concat(File.separator).concat(ConstantUtils.JOB_HISTORY));
+
+		if (historyPath.isDirectory()) {
+			File[] historys = historyPath.listFiles();
+			loadHistorys = new JobHistory[historys.length];
+
+			//Faz o parser do array de arquivos em array de historico de job
+			for (int i = 0; i < historys.length; i++) {
+				Object objectSerialized = SerializationUtils.deserealizeFile(historys[i]);
+				
+				if (objectSerialized != null) {
+					loadHistorys[i] = (JobHistory) objectSerialized;
+				}
+			}
+		}
+
+		return loadHistorys;
+	}
+
+	private File findOldestHistory(File[] historys) {
+		// TODO implementar
+		return null;
 	}
 
 }

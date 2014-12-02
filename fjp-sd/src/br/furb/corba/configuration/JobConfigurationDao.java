@@ -1,7 +1,7 @@
 package br.furb.corba.configuration;
 
 
-public interface JobManagerDao {
+public interface JobConfigurationDao {
 	
 	void save(Job job);
 	boolean exist(String jobName);
